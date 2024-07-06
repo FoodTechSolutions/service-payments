@@ -1,5 +1,6 @@
 using Domain.Boundaries.Invoices.CreateInvoice;
 using Domain.entities;
+using Domain.Repositories;
 using Domain.Services;
 using Domain.ValueObjects;
 
@@ -7,6 +8,13 @@ namespace Application.Services;
 
 public class InvoiceService : IInvoiceService
 {
+    private readonly IInvoiceRepository _invoiceRepository;
+
+    public InvoiceService(IInvoiceRepository invoiceRepository)
+    {
+        _invoiceRepository = invoiceRepository;
+    }
+
     public Task<CreateInvoiceResponse> CreateInvoiceAsync(CreateInvoiceRequest request)
     {
         var invoice = new Invoice(
@@ -17,6 +25,8 @@ public class InvoiceService : IInvoiceService
             request.DueDate,
             request.OrderId
         );
+
+        _invoiceRepository.Add(invoice);
 
         return Task.FromResult(
             new CreateInvoiceResponse(

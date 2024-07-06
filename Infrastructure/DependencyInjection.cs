@@ -1,4 +1,6 @@
-﻿using Infrastructure.Context;
+﻿using Domain.Repositories;
+using Infrastructure.Context;
+using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -9,8 +11,7 @@ namespace Infrastructure;
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services, IConfiguration configuration
-    )
+        this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<MongoDbSettings>(configuration.GetSection(nameof(MongoDbSettings)));
 
@@ -20,12 +21,15 @@ public static class DependencyInjection
             return new MongoClient(settings.ConnectionString);
         });
 
-        services.AddScoped(sp =>
+        services.AddScoped<IMongoDatabase>(sp =>
         {
-            var mongoClient = sp.GetRequiredService<IMongoClient>();
+            var client = sp.GetRequiredService<IMongoClient>();
             var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-            return new MongoDbContext(mongoClient, settings.DatabaseName);
+            return client.GetDatabase(settings.DatabaseName);
         });
+
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
         return services;
     }
