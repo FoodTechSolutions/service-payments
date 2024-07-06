@@ -18,7 +18,7 @@ public class Invoice
         Guid orderId
     )
     {
-        Id = new Guid();
+        Id = Guid.NewGuid();
         Amount = amount;
         DueDate = dueDate;
         OrderId = orderId;
