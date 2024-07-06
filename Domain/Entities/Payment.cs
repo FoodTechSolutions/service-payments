@@ -4,17 +4,20 @@ public class Payment
 {
     public Guid Id { get; private set; }
     public Money Amount { get; private set; }
-    public PaymentMethod PaymentMethod { get; private set; }
+    public PaymentType PaymentType { get; private set; }
     public PaymentStatus Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public Payment(Guid id, Money amount, PaymentMethod paymentMethod)
+    public Guid InvoiceId { get; private set; }
+
+    public Payment(Money amount, PaymentType paymentType, Guid invoiceId)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Amount = amount;
-        PaymentMethod = paymentMethod;
+        PaymentType = paymentType;
         Status = PaymentStatus.Pending;
+        InvoiceId = invoiceId;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
@@ -56,8 +59,11 @@ public class Payment
     }
 }
 
-public class PaymentMethod
+public enum PaymentType
 {
+    Debit,
+    Credit,
+    Pix
 }
 
 public enum PaymentStatus
