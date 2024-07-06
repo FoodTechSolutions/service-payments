@@ -1,0 +1,122 @@
+# Compiled files
+*.microsoft
+*.unitypackage
+*.apk
+*.app
+*.exe
+*.o
+*.so
+*.pdb
+*.dll
+*.class
+*.obj
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Visual Studio files
+.vs/
+*.vspscc
+*.suo
+*.sln.docstates
+*.user
+*.userosscache
+*.sln.ide
+*.suo
+*.ntvs_analysis.dat
+*.ntvs_project_cache
+*.vssscc
+.vscode/
+
+# Rider files
+.idea/
+*.sln.iml
+
+# NuGet
+*.nuget.props
+*.nuget.targets
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Roslyn cache directories
+*.ide/
+
+# Resharper files
+_ReSharper.*/
+
+# Rider
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac trash folder
+.Trashes/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Files for testing frameworks
+*.opendb
+*.hprof
+
+# Visual Studio Code
+.vscode/
+
+# Windows debugging folder
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_Packages/
+*.dbmdl
+
+# Miscellaneous
+*.LaunchSettings.json
+*.csproj.user
