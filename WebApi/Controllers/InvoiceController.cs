@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
-    [Route("/invoices")]
+    [Route("/invoice")]
     [ApiController]
     public class InvoiceController : ControllerBase
     {
@@ -25,6 +25,33 @@ namespace WebApplication1.Controllers
             try
             {
                 var response = await _invoiceService.CreateInvoiceAsync(request);
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest(
+                    new ProblemDetails
+                    {
+                        Title = e.Message,
+                        Status = StatusCodes.Status400BadRequest
+                    }
+                );
+            }
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> GetInvoiceByOrderId(
+            [FromRoute] Guid id
+        )
+        {
+            try
+            {
+                var response = await _invoiceService.GetInvoiceByOrderIdAsync(id);
 
                 return Ok(response);
             }

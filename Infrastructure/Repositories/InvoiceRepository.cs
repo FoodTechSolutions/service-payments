@@ -26,6 +26,11 @@ public class InvoiceRepository : IInvoiceRepository
 
     public void Update(Invoice invoice)
     {
-        throw new NotImplementedException();
+        _collection.ReplaceOne(x => x.Id == invoice.Id, invoice);
+    }
+
+    public Task<Invoice> GetByOrderIdAsync(Guid id)
+    {
+        return _collection.Find(x => x.OrderId == id).FirstOrDefaultAsync();
     }
 }

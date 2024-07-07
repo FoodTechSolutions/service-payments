@@ -39,4 +39,14 @@ public class InvoiceService : IInvoiceService
             )
         );
     }
+
+    public async Task<Invoice> GetInvoiceByOrderIdAsync(Guid id)
+    {
+        var invoice = await _invoiceRepository.GetByOrderIdAsync(id);
+
+        if (invoice is null)
+            throw new Exception("Invoice not found");
+
+        return invoice;
+    }
 }
