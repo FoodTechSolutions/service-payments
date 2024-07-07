@@ -1,5 +1,5 @@
 using Domain.Boundaries.Invoices.CreateInvoice;
-using Domain.entities;
+using Domain.Entities;
 using Domain.Repositories;
 using Domain.Services;
 using Domain.ValueObjects;

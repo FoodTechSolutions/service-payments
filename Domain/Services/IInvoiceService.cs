@@ -1,10 +1,10 @@
 using Domain.Boundaries.Invoices.CreateInvoice;
-using Domain.entities;
+using Domain.Entities;
 
 namespace Domain.Services;
 
 public interface IInvoiceService
 {
     Task<CreateInvoiceResponse> CreateInvoiceAsync(CreateInvoiceRequest request);
-    Task<Invoice>? GetInvoiceByOrderIdAsync(Guid id);
+    Task<Invoice> GetInvoiceByOrderIdAsync(Guid id);
 }

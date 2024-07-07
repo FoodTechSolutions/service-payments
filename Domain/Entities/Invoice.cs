@@ -1,6 +1,6 @@
 using Domain.ValueObjects;
 
-namespace Domain.entities;
+namespace Domain.Entities;
 
 public class Invoice
 {

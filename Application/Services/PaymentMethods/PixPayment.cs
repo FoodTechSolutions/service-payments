@@ -1,4 +1,5 @@
 using Domain.Boundaries.Payments.ProcessPayment;
+using Domain.Entities;
 using Domain.Services;
 
 namespace Application.Services.PaymentMethods;

@@ -1,7 +1,7 @@
 using Domain.Boundaries.Payments.ProcessPayment;
+using Domain.Entities;
 using Domain.Services;
 using Domain.ValueObjects;
-using System;
 
 namespace Application.Services.PaymentMethods
 {

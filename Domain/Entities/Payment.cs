@@ -1,5 +1,7 @@
 using Domain.ValueObjects;
 
+namespace Domain.Entities;
+
 public class Payment
 {
     public Guid Id { get; private set; }
@@ -57,20 +59,4 @@ public class Payment
         Status = PaymentStatus.Failed;
         UpdatedAt = DateTime.UtcNow;
     }
-}
-
-public enum PaymentType
-{
-    Debit,
-    Credit,
-    Pix
-}
-
-public enum PaymentStatus
-{
-    Pending,
-    Completed,
-    Canceled,
-    Refunded,
-    Failed
 }
