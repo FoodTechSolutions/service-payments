@@ -1,3 +1,4 @@
+using Application.Factories;
 using Application.Services.PaymentMethods;
 using Domain.Boundaries.Payments.ProcessPayment;
 using Domain.Repositories;
@@ -40,23 +41,5 @@ public class PaymentService : IPaymentService
             PaymentId = payment.Id,
             Status = payment.Status
         });
-    }
-}
-
-public static class PaymentMethodFactory
-{
-    public static IPaymentMethod CreatePaymentMethod(PaymentType paymentType)
-    {
-        switch (paymentType)
-        {
-            case PaymentType.Debit:
-                return new DebitPayment();
-            case PaymentType.Credit:
-                return new CreditPayment();
-            case PaymentType.Pix:
-                return new PixPayment();
-            default:
-                throw new NotSupportedException($"Payment type '{paymentType}' is not supported.");
-        }
     }
 }
