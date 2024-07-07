@@ -30,6 +30,9 @@ public class PaymentService : IPaymentService
         IPaymentMethod paymentMethod = PaymentMethodFactory.CreatePaymentMethod(request.PaymentType);
 
         var payment = await paymentMethod.ProcessPaymentAsync(request);
+        foundInvoice.Pay(payment.Id);
+
+        _invoiceRepository.Update(foundInvoice);
         _paymentRepository.Add(payment);
 
         return await Task.FromResult(new ProcessPaymentResponse
