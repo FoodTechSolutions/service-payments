@@ -34,12 +34,4 @@ public class Invoice
         PaidDate = DateTime.UtcNow;
         PaymentId = paymentId;
     }
-
-    public void MarkAsOverdue()
-    {
-        if (Status != InvoiceStatus.Unpaid)
-            throw new InvalidOperationException("Invoice is not in a valid state to be marked as overdue.");
-
-        Status = InvoiceStatus.Overdue;
-    }
 }
