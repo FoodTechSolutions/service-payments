@@ -1,7 +1,5 @@
-using System;
 using Domain.Entities;
 using Domain.ValueObjects;
-using NUnit.Framework;
 
 namespace Tests.Domain.Entities;
 
