@@ -30,7 +30,13 @@ namespace WebApplication1.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                if (e.Message == "Order not found")
+                    return NotFound(new
+                    {
+                        message = e.Message,
+                        status = 404
+                    });
+
                 return BadRequest(
                     new ProblemDetails
                     {
