@@ -1,3 +1,7 @@
+using Application.BackgroundServices.Models;
+using Application.Configuration;
+using Application.Helpers;
+using Application.Services.Interface;
 using Domain.Boundaries.Payments.ProcessPayment;
 using Domain.Services;
 using Domain.ValueObjects;
@@ -10,10 +14,12 @@ namespace WebApplication1.Controllers;
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
+    private readonly IRabbitMqService _rabbitMqService;
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentController(IPaymentService paymentService, IRabbitMqService rabbitMqService)
     {
         _paymentService = paymentService;
+        _rabbitMqService = rabbitMqService;
     }
 
     [HttpPost("/process")]
@@ -47,5 +53,25 @@ public class PaymentController : ControllerBase
                 }
             );
         }
+    }
+
+
+    [HttpPost("Publish")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+    public async Task<ActionResult> Publish([FromBody] RabbitMqExampleModel request)
+    {
+
+        var model = new RabbitMqPublishModel<RabbitMqExampleModel>
+        {
+            ExchangeName = EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
+            RoutingKey = string.Empty,
+            Message = request,
+        };
+
+        _rabbitMqService.Publish(model);
+
+        return Ok("Ok");
     }
 }
