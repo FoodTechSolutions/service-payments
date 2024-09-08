@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IProcessEventExampleService, ProcessEventExampleService>();
+        services.AddScoped<ICreateInvoiceService, CreateInvoiceService>();
 
 
         services.AddSingleton<IRabbitMqService, RabbitMqService>();
@@ -24,6 +25,8 @@ public static class DependencyInjection
     public static IServiceCollection AddHostedServices(this IServiceCollection services)
     {
         services.AddHostedService<RabbitMqExampleHandler>();
+        services.AddHostedService<CreateInvoiceHandler>();
+
         return services;
     }
 }

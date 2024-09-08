@@ -1,7 +1,6 @@
 ﻿using Application.BackgroundServices.Models;
 using Application.Helpers;
 using Application.Services.Interface;
-using Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,11 +8,15 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.BackgroundServices
 {
-    public class RabbitMqExampleHandler : BackgroundService
+    public class CreateInvoiceHandler : BackgroundService
     {
         private IConnection _connection;
         private IModel _channel;
@@ -23,8 +26,7 @@ namespace Application.BackgroundServices
         private string RABBIT_PORT;
         private string RABBIT_USERNAME;
         private string RABBIT_PASSWORD;
-
-        public RabbitMqExampleHandler(
+        public CreateInvoiceHandler(
         IServiceProvider serviceProvider,
         ILogger<RabbitMqExampleHandler> logger,
         IConfiguration configuration)
@@ -37,6 +39,7 @@ namespace Application.BackgroundServices
             RABBIT_PASSWORD = configuration.GetSection("RabbitMqSettings")["PASSWORD"] ?? string.Empty;
             CreateConnection();
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             CreateConsumer();
@@ -67,15 +70,15 @@ namespace Application.BackgroundServices
                 _channel = _connection.CreateModel();
 
                 _channel.ExchangeDeclare(
-                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
+                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
                     type: ExchangeType.Direct);
 
                 _channel.QueueDeclare(
-                    queue: EventConstants.CREATE_INVOICE_QUEUE);
+                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE);
 
                 _channel.QueueBind(
-                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
-                    queue: EventConstants.CREATE_INVOICE_QUEUE,
+                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
+                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE,
                     routingKey: string.Empty);
 
 
@@ -92,12 +95,13 @@ namespace Application.BackgroundServices
             var value = Encoding.UTF8.GetString(e.Body.ToArray());
             try
             {
+                //await Task.Delay(1000);
 
-                var model = JsonConvert.DeserializeObject<CreateInvoiceModel>(value);
+                var rabbitMqExampleModel = JsonConvert.DeserializeObject<RabbitMqExampleModel>(value);
 
-                var service = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
+                var rabbitMqExampleService = scope.ServiceProvider.GetRequiredService<IProcessEventExampleService>();
 
-                await service.CreateInvoiceAsync(model);
+                await rabbitMqExampleService.ProcessEvent(rabbitMqExampleModel);
 
                 _channel.BasicAck(e.DeliveryTag, false);
             }
