@@ -1,5 +1,6 @@
 ﻿using Application.BackgroundServices.Models;
 using Application.Helpers;
+using Application.Services;
 using Application.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,14 +22,14 @@ namespace Application.BackgroundServices
         private IConnection _connection;
         private IModel _channel;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<RabbitMqExampleHandler> _logger;
+        private readonly ILogger<CreateInvoiceHandler> _logger;
         private string RABBIT_HOST;
         private string RABBIT_PORT;
         private string RABBIT_USERNAME;
         private string RABBIT_PASSWORD;
         public CreateInvoiceHandler(
         IServiceProvider serviceProvider,
-        ILogger<RabbitMqExampleHandler> logger,
+        ILogger<CreateInvoiceHandler> logger,
         IConfiguration configuration)
         {
             _logger = logger;
@@ -97,11 +98,11 @@ namespace Application.BackgroundServices
             {
                 //await Task.Delay(1000);
 
-                var rabbitMqExampleModel = JsonConvert.DeserializeObject<RabbitMqExampleModel>(value);
+                var model = JsonConvert.DeserializeObject<CreateInvoiceModel>(value);
 
-                var rabbitMqExampleService = scope.ServiceProvider.GetRequiredService<IProcessEventExampleService>();
+                var service = scope.ServiceProvider.GetRequiredService<ICreateInvoiceService>();
 
-                await rabbitMqExampleService.ProcessEvent(rabbitMqExampleModel);
+                await service.ProcessEvent(model);
 
                 _channel.BasicAck(e.DeliveryTag, false);
             }
