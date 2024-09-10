@@ -52,7 +52,7 @@ namespace Application.BackgroundServices
             //_channel.ModelShutdown += async (s, e) => await Channel_Shutdown(s, e);
             consumer.Received += async (s, e) => await ProcessEventAsync(s, e);
             _channel.BasicQos(0, 20, false);
-            _channel.BasicConsume(EventConstants.RABBITMQ_EXAMPLE_QUEUE, false, consumer);
+            _channel.BasicConsume(EventConstants.CREATE_INVOICE_QUEUE, false, consumer);
         }
 
         private void CreateConnection()
@@ -71,15 +71,15 @@ namespace Application.BackgroundServices
                 _channel = _connection.CreateModel();
 
                 _channel.ExchangeDeclare(
-                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
+                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
                     type: ExchangeType.Direct);
 
                 _channel.QueueDeclare(
-                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE);
+                    queue: EventConstants.CREATE_INVOICE_QUEUE);
 
                 _channel.QueueBind(
-                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
-                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE,
+                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
+                    queue: EventConstants.CREATE_INVOICE_QUEUE,
                     routingKey: string.Empty);
 
 
