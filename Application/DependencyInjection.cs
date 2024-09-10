@@ -1,9 +1,8 @@
 ﻿using Application.Services;
 using Domain.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
-
-using Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
@@ -11,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IInvoiceService, InvoiceService>();
         services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 }

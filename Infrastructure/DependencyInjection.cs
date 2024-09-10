@@ -1,5 +1,4 @@
 ﻿using Domain.Repositories;
-using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +29,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
