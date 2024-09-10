@@ -7,6 +7,15 @@
 Link do Figma: </br>
 https://www.figma.com/file/Ucj1iHtpaTif7amdmwKUfR/Arquitetura---AWS-Tech-Challenger?type=whiteboard&node-id=0%3A1&t=rP3icHWmtlshkT5Q-1
 
+## Justificativa da escolha do Padrão SAGA Orquestrado
+
+- Coordenação Simples: No seu caso, o padrão Saga Orquestrado permite que um serviço central (orquestrador) gerencie o fluxo de trabalho entre os serviços de pedidos e pagamentos. Isso significa que, se um pedido for feito e o pagamento falhar, o orquestrador pode acionar automaticamente uma compensação, como cancelar o pedido, garantindo que não haja problemas com pedidos pendentes e pagamentos falhos.
+- Consistência dos Dados: Garantir que os pedidos e pagamentos estejam sempre sincronizados é crucial. O padrão Saga Orquestrado ajuda a manter a consistência, assegurando que todas as etapas do processo (como criar um pedido, processar o pagamento e atualizar o status) sejam concluídas corretamente ou revertidas em caso de falha.
+- Facilidade de Manutenção: Se você precisar atualizar a forma como os pedidos são processados ou adicionar novos métodos de pagamento, o orquestrador centralizado facilita essas mudanças. Em vez de ajustar cada serviço individualmente, você só precisa atualizar o orquestrador para refletir as novas regras ou fluxos de trabalho.
+- Monitoramento Eficiente: Com um orquestrador centralizado, você pode monitorar facilmente o status dos pedidos e pagamentos. Isso facilita a detecção de problemas e a realização de ajustes rápidos para garantir que tudo esteja funcionando conforme o esperado.
+- Gerenciamento de Falhas: Se ocorrer um problema durante o processo de pagamento ou enquanto um pedido está sendo processado, o orquestrador pode gerenciar automaticamente as ações corretivas, como emitir um reembolso ou ajustar o status do pedido. Isso melhora a resiliência do sistema e proporciona uma melhor experiência ao cliente.
+
+
 # Guia de Execução do Kubernetes
 
 Este é um guia passo a passo para executar o Kubernetes e configurar todos os componentes necessários para o seu sistema.
