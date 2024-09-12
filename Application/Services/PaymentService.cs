@@ -25,36 +25,44 @@ public class PaymentService : IPaymentService
 
     public async Task<ProcessPaymentResponse> Process(ProcessPaymentRequest request)
     {
-        var foundInvoice = _invoiceRepository.GetById(request.InvoiceId);
+        //var foundInvoice = _invoiceRepository.GetById(request.InvoiceId);
 
-        if (foundInvoice == null)
-            throw new InvalidOperationException("Invoice not found.");
+        //if (foundInvoice == null)
+        //    throw new InvalidOperationException("Invoice not found.");
 
-        if (foundInvoice.Status.Equals(InvoiceStatus.Paid))
-            throw new InvalidOperationException("Invoice is already paid.");
+        //if (foundInvoice.Status.Equals(InvoiceStatus.Paid))
+        //    throw new InvalidOperationException("Invoice is already paid.");
 
-        IPaymentMethod paymentMethod = PaymentMethodFactory.CreatePaymentMethod(request.PaymentType);
+        //IPaymentMethod paymentMethod = PaymentMethodFactory.CreatePaymentMethod(request.PaymentType);
 
-        var payment = await paymentMethod.ProcessPaymentAsync(request);
-        foundInvoice.Pay(payment.Id);
+        //var payment = await paymentMethod.ProcessPaymentAsync(request);
+        //foundInvoice.Pay(payment.Id);
 
-        _invoiceRepository.Update(foundInvoice);
-        _paymentRepository.Add(payment);
+        //_invoiceRepository.Update(foundInvoice);
+        //_paymentRepository.Add(payment);
 
         // Publish paid
-        var rabbitRequest = new RabbitMqPublishModel<Invoice>()
+        var rabbitRequest = new RabbitMqPublishModel<CreateProduction>()
         {
-            ExchangeName = EventConstants.INVOICE_PAID_EXCHANGE,
+            ExchangeName = EventConstants.PAID_EXCHANGE,
             RoutingKey = string.Empty,
-            Message = foundInvoice
+            Message = new CreateProduction
+            {
+                OrderId = request.InvoiceId,
+            }
 
         };
         _rabbitMqService.Publish(rabbitRequest);
 
         return await Task.FromResult(new ProcessPaymentResponse
         {
-            PaymentId = payment.Id,
-            Status = payment.Status
+            PaymentId = Guid.Parse("dae5b898-209d-42f6-a93e-088c35b3c528"),
+            Status = PaymentStatus.Completed
         });
+    }
+
+    public class CreateProduction()
+    {
+        public Guid OrderId { get; set; }
     }
 }

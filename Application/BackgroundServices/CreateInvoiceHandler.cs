@@ -2,6 +2,8 @@
 using Application.Helpers;
 using Application.Services;
 using Application.Services.Interface;
+using Domain.Boundaries.Invoices.CreateInvoice;
+using Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -52,12 +54,11 @@ namespace Application.BackgroundServices
             //_channel.ModelShutdown += async (s, e) => await Channel_Shutdown(s, e);
             consumer.Received += async (s, e) => await ProcessEventAsync(s, e);
             _channel.BasicQos(0, 20, false);
-            _channel.BasicConsume(EventConstants.RABBITMQ_EXAMPLE_QUEUE, false, consumer);
+            _channel.BasicConsume(EventConstants.CREATE_INVOICE_QUEUE, false, consumer);
         }
 
         private void CreateConnection()
         {
-
             try
             {
                 _connection = new ConnectionFactory
@@ -71,15 +72,15 @@ namespace Application.BackgroundServices
                 _channel = _connection.CreateModel();
 
                 _channel.ExchangeDeclare(
-                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
+                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
                     type: ExchangeType.Direct);
 
                 _channel.QueueDeclare(
-                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE);
+                    queue: EventConstants.CREATE_INVOICE_QUEUE);
 
                 _channel.QueueBind(
-                    exchange: EventConstants.RABBITMQ_EXAMPLE_EXCHANGE,
-                    queue: EventConstants.RABBITMQ_EXAMPLE_QUEUE,
+                    exchange: EventConstants.CREATE_INVOICE_EXCHANGE,
+                    queue: EventConstants.CREATE_INVOICE_QUEUE,
                     routingKey: string.Empty);
 
 
@@ -98,11 +99,11 @@ namespace Application.BackgroundServices
             {
                 //await Task.Delay(1000);
 
-                var model = JsonConvert.DeserializeObject<CreateInvoiceModel>(value);
+                var model = JsonConvert.DeserializeObject<CreateInvoiceRequest>(value);
 
-                var service = scope.ServiceProvider.GetRequiredService<ICreateInvoiceService>();
+                var service = scope.ServiceProvider.GetRequiredService<IInvoiceService>();
 
-                await service.ProcessEvent(model);
+                await service.CreateInvoiceAsync(model);
 
                 _channel.BasicAck(e.DeliveryTag, false);
             }

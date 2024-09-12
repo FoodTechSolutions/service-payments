@@ -1,16 +1,14 @@
-﻿using Application.Configuration;
-using Application.Services.Interface;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text;
+using RabbitMQ.Client.Events;
+using Application.Configuration;
+using Application.Services.Interface;
 
-namespace Application.Services;
+namespace APPLICATION.Service;
 
 public class RabbitMqService(ILogger<RabbitMqService> logger, IConfiguration configuration) : IRabbitMqService
 {
@@ -45,6 +43,10 @@ public class RabbitMqService(ILogger<RabbitMqService> logger, IConfiguration con
         }
     }
 
+    public EventingBasicConsumer GetConsumer()
+        => new EventingBasicConsumer(_channel);
+
+
     public void Publish<T>(RabbitMqPublishModel<T> rabbitMqConfig)
     {
         try
@@ -72,3 +74,4 @@ public class RabbitMqService(ILogger<RabbitMqService> logger, IConfiguration con
         return Encoding.UTF8.GetBytes(jsonSerialize);
     }
 }
+

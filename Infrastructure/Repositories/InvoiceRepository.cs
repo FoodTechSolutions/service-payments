@@ -11,6 +11,7 @@ public class InvoiceRepository : IInvoiceRepository
     public InvoiceRepository(IMongoDatabase database)
     {
         _collection = database.GetCollection<Invoice>("Invoices");
+        var a = _collection.Find(x => x.OrderId == Guid.Empty);
     }
 
     public Invoice? GetById(Guid id)
@@ -28,8 +29,8 @@ public class InvoiceRepository : IInvoiceRepository
         _collection.ReplaceOne(x => x.Id == invoice.Id, invoice);
     }
 
-    public Task<Invoice> GetByOrderIdAsync(Guid id)
+    public async Task<Invoice> GetByOrderIdAsync(Guid id)
     {
-        return _collection.Find(x => x.OrderId == id).FirstOrDefaultAsync();
+        return await _collection.Find(x => x.OrderId == id).FirstOrDefaultAsync();
     }
 }

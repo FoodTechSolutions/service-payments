@@ -5,6 +5,7 @@ namespace Application;
 
 using Application.BackgroundServices;
 using Application.Services.Interface;
+using APPLICATION.Service;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
@@ -16,7 +17,7 @@ public static class DependencyInjection
         services.AddScoped<ICreateInvoiceService, CreateInvoiceService>();
 
 
-        services.AddSingleton<IRabbitMqService, RabbitMqService>();
+        services.AddScoped<IRabbitMqService, RabbitMqService>();
 
         return services;
     }

@@ -26,7 +26,7 @@ public class InvoiceService : IInvoiceService
             request.OrderId
         );
 
-        _invoiceRepository.Add(invoice);
+        //_invoiceRepository.Add(invoice);
 
         return Task.FromResult(
             new CreateInvoiceResponse(
